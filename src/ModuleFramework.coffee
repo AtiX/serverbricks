@@ -2,8 +2,23 @@ directoryUtils = require './utils/directoryUtils'
 Promise = require 'bluebird'
 
 module.exports = class ModuleFramework
-  constructor: (@expressApp, @log, @environment) ->
-    # Parts of the framework that actually do something with the modules
+  constructor: (options = {}) ->
+    # Extract options
+
+    @log = options.log
+    # Fallback to console logging
+    @log ?= {
+      info: (message) -> console.log message
+      debug: (message) -> console.log message
+      error: (message) -> console.error message
+    }
+
+    @expressApp = options.expressApp
+    if not @expressApp?
+      throw new Error('options.expressApp must not be null')
+
+    @environment = options.environment || {}
+
     @frameworkParts = []
     @modules = {}
     return
