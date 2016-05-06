@@ -1,0 +1,8 @@
+--name       "Module Template"
+--readme     README.md
+--title      "Codo Documentation"
+--private
+--quiet
+--extension  coffee
+--output     ./doc
+./src

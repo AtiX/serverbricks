@@ -1,0 +1,36 @@
+{
+  "name": "serverbricks",
+  "version": "0.0.1",
+  "description": "Pluggable Node.js server framework based on express to jumpstart server development",
+  "main": "./build/index.js",
+  "readme": "README.md",
+  "scripts": {
+    "test": "grunt test",
+    "postinstall": "grunt postInstall"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:AtiX/serverbricks.git"
+  },
+  "keywords": [
+    "express",
+    "framework"
+  ],
+  "author": "Arthur Silber",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AtiX/serverbricks/issues"
+  },
+  "homepage": "https://github.com/AtiX/serverbricks",
+  "dependencies": {
+    "chai": "3.5.0",
+    "codo": "2.1.0",
+    "coffeelint": "1.15.0",
+    "grunt": "1.0.1",
+    "grunt-cli": "1.2.0",
+    "grunt-contrib-coffee": "1.0.0",
+    "grunt-mocha-test": "0.12.7",
+    "grunt-shell": "1.3.0",
+    "mocha": "2.4.5"
+  }
+}
