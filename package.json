@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/AtiX/serverbricks",
   "dependencies": {
+    "bluebird": "3.3.5",
     "chai": "3.5.0",
     "codo": "2.1.0",
     "coffeelint": "1.15.0",
