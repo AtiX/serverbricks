@@ -23,7 +23,8 @@
   },
   "homepage": "https://github.com/AtiX/serverbricks",
   "dependencies": {
-    "bluebird": "3.3.5"
+    "bluebird": "3.3.5",
+    "node-sass-middleware": "0.9.8"
   },
   "devDependencies": {
     "chai": "3.5.0",

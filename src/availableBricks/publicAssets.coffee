@@ -1,6 +1,5 @@
 path = require 'path'
 express = require 'express'
-sassMiddleware = require 'node-sass-middleware'
 Promise = require 'bluebird'
 directoryUtils = require '../utils/directoryUtils'
 
@@ -14,22 +13,8 @@ module.exports = class PublicAssets
   initializeModule: (moduleFolder, module) =>
     p = Promise.resolve()
     p = p.then =>
-      # If there is a public/styles folder, autogenerate css out of sass
-      pubStylesFolder = path.join moduleFolder, 'public', 'styles'
-      return directoryUtils.directoryExists(pubStylesFolder)
-      .then (doesExist) =>
-        if doesExist
-          @expressApp.use sassMiddleware({
-            src: pubStylesFolder
-            debug: false
-            outputStyle: 'compressed'
-            prefix: '/styles'
-            indentedSyntax: true,
-            sourceMap: true
-          })
-    p.finally =>
       # Check if public folder exists, serve it staticly
-      pubFolder = path.join parentDir, moduleFolder, 'public'
+      pubFolder = path.join moduleFolder, 'public'
       return directoryUtils.directoryExists(pubFolder)
       .then (doesExist) =>
         if doesExist
