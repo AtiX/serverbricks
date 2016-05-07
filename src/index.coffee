@@ -1,2 +1,2 @@
 module.exports =
-  ModuleFramework = require './ModuleFramework'
+  ModuleFramework: require './ModuleFramework'
