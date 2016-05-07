@@ -11,11 +11,11 @@ module.exports = class PublicAssets
     @expressApp.use express.static('node_modules/font-awesome/')
 
   # called on each module
-  initializeModule: (parentDir, moduleFolder, module) =>
+  initializeModule: (moduleFolder, module) =>
     p = Promise.resolve()
     p = p.then =>
       # If there is a public/styles folder, autogenerate css out of sass
-      pubStylesFolder = path.join parentDir, moduleFolder, 'public', 'styles'
+      pubStylesFolder = path.join moduleFolder, 'public', 'styles'
       return directoryUtils.directoryExists(pubStylesFolder)
       .then (doesExist) =>
         if doesExist

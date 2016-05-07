@@ -1,5 +1,6 @@
 directoryUtils = require './utils/directoryUtils'
 Promise = require 'bluebird'
+path = require 'path'
 
 module.exports = class ServerBricks
   constructor: (options = {}) ->
@@ -17,6 +18,11 @@ module.exports = class ServerBricks
     if not @expressApp?
       throw new Error('options.expressApp must not be null')
 
+    @modulePath = options.modulePath
+    if not @modulePath?
+      throw new Error('options.modulePath must not be null')
+    @modulePath = path.resolve @modulePath
+
     @environment = options.environment || {}
 
     @bricks = []
@@ -30,7 +36,7 @@ module.exports = class ServerBricks
 
       @bricks.push brickInstanceOrString
 
-  initialize: (@modulePath, partsToInitialize) =>
+  initialize: (partsToInitialize) =>
     @log.info "[ServerBricks] Initializing Framework (modules: #{@modulePath})"
 
     # If no filter is given, init all parts, else, only initialize the selected ones
@@ -89,6 +95,7 @@ module.exports = class ServerBricks
 
     partPromises = []
     for part in selectedParts
-      partPromises.push part.initializeModule(parentDir, moduleFolder, module)
+      absoluteModuleDir = path.join parentDir, moduleFolder
+      partPromises.push part.initializeModule(absoluteModuleDir, module)
 
     return Promise.all(partPromises)

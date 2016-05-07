@@ -21,8 +21,8 @@ module.exports = class BrowserifyCode
     return
 
   # called on each module
-  initializeModule: (parentDir, moduleFolder, module) =>
-    codeDir = path.join parentDir, moduleFolder, 'client'
+  initializeModule: (moduleFolder, module) =>
+    codeDir = path.join moduleFolder, 'client'
 
     p = directoryUtils.listFiles codeDir, '.coffee'
     p = p.then (codeFiles) =>

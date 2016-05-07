@@ -16,9 +16,10 @@ module.exports = class ViewFolders
       @expressApp.enable('view cache')
     return
 
-  initializeModule: (parentDir, moduleFolder, module) =>
+  initializeModule: (moduleFolder, module) =>
+    viewsFolder = path.join moduleFolder, 'views'
+
     return Promise.resolve().then =>
-      viewsFolder = path.join parentDir, moduleFolder, 'views'
       return directoryUtils.directoryExists(viewsFolder)
       .then (doesExist) =>
         if doesExist

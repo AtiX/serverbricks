@@ -7,14 +7,14 @@ module.exports = class Routes
     return
 
   # called on each module
-  initializeModule: (parentDir, moduleFolder, module) =>
-    routesDir = path.join parentDir, moduleFolder, 'routes'
+  initializeModule: (moduleFolder, module) =>
+    routesDir = path.join moduleFolder, 'routes'
 
-    return directoryUtils.listFiles(routesDir, '.coffee')
+    return directoryUtils.listFiles(routesDir)
     .then (routeFiles) =>
       for file in routeFiles
         # Require route module and call initialize on it
-        routeModule = require path.join '../../../../', routesDir, file
+        routeModule = require path.join routesDir, file
         routeModule.initialize @expressApp
     .catch (error) ->
       # ignore it if routes subfolder does not exist

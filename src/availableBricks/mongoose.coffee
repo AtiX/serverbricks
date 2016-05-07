@@ -23,14 +23,14 @@ module.exports = class Mongoose
         @log.info '[MongoDB] Connection established'
         resolve()
 
-  initializeModule: (parentDir, moduleFolder, module) =>
-    modelsPath = path.join parentDir, moduleFolder, 'db', 'models'
+  initializeModule: (moduleFolder, module) =>
+    modelsPath = path.join moduleFolder, 'db', 'models'
 
-    return directoryUtils.listFiles modelsPath, '.coffee'
+    return directoryUtils.listFiles modelsPath
     .then (files) =>
       # Load all models by requiring them
       for modelDefinition in files
-        model = require path.join '../../../../', modelsPath, modelDefinition
+        model = require path.join modelsPath, modelDefinition
         @log.debug "[MongoDB] Loaded model '#{model.modelName}'"
     .catch (error) ->
       # Ignore it if the db/models subfolder does not exist
