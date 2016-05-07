@@ -19,28 +19,16 @@ module.exports = class ModuleFramework
 
     @environment = options.environment || {}
 
-    @frameworkParts = []
+    @bricks = []
     @modules = {}
     return
 
-  loadFrameworkParts: (excludedParts = []) =>
-    @log.info '[Framework] Loading available parts'
+  addBrick: (brickInstanceOrString, brickParameters = {}) =>
+    if (typeof brickInstanceOrString) == 'string'
+      BrickClass = require "./frameworkParts/#{brickInstanceOrString}"
+      brickInstanceOrString = new BrickClass(brickParameters)
 
-    p = directoryUtils.listFiles(__dirname + '/frameworkParts', '.coffee')
-    p = p.then (files) ->
-      plainNames = files.map (file) -> file.substr(0, file.length - 7)
-      return plainNames
-    p = p.then (partNames) =>
-      partNames = partNames.filter (partName) -> excludedParts.indexOf(partName) == -1
-      for partName in partNames
-        @log.debug "[Framework] Loading part '#{partName}'"
-
-        PartClass = require './frameworkParts/' + partName
-        partInstance = new PartClass()
-        partInstance.name = partName
-        @frameworkParts.push partInstance
-
-    return p
+      @bricks.push brickInstanceOrString
 
   initialize: (@modulePath, partsToInitialize) =>
     @log.info "[Framework] Initializing Framework (#{@modulePath})"
@@ -48,10 +36,10 @@ module.exports = class ModuleFramework
     # If no filter is given, init all parts, else, only initialize the selected ones
     selectedParts = []
     if not partsToInitialize?
-      selectedParts = @frameworkParts
+      selectedParts = @bricks
     else
       for partName in partsToInitialize
-        part = @frameworkParts.find (p) -> p.name == partName
+        part = @bricks.find (p) -> p.name == partName
 
         if part.isInizialized = true
           @log.info "[Framework] Skipping initialization of part '#{partName}' because it already is initialized"
