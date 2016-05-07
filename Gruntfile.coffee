@@ -35,5 +35,5 @@ module.exports = (grunt) ->
   # Tasks to be run when gitlab-ci is running
   grunt.registerTask 'ciTestset', ['shell:coffeelint', 'mochaTest', 'coffee']
 
-  # Build project after installing this module
-  grunt.registerTask 'postInstall', ['coffee']
+  # Create JS and documentation
+  grunt.registerTask 'prepublish', ['coffee', 'shell:codo']

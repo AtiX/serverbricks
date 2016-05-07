@@ -1,12 +1,12 @@
 {
   "name": "serverbricks",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Pluggable Node.js server framework based on express to jumpstart server development",
   "main": "./build/index.js",
   "readme": "README.md",
   "scripts": {
     "test": "grunt test",
-    "postinstall": "grunt postInstall"
+    "prepublish": "grunt prepublish"
   },
   "repository": {
     "type": "git",
@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/AtiX/serverbricks",
   "dependencies": {
-    "bluebird": "3.3.5",
+    "bluebird": "3.3.5"
+  },
+  "devDependencies": {
     "chai": "3.5.0",
     "codo": "2.1.0",
     "coffeelint": "1.15.0",
