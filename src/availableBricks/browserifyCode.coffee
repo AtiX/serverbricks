@@ -15,7 +15,7 @@ browserify.settings({
 })
 
 module.exports = class BrowserifyCode extends Brick
-  constructor: (config = {})->
+  constructor: (config = {}) ->
     @bundledFiles = []
     @externalModules = config.externalModules || []
     @externalBundleName = config.externalBundleName || '/shared.js'

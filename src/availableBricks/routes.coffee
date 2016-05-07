@@ -22,4 +22,3 @@ module.exports = class Routes extends Brick
         return
       else
         throw error
-
