@@ -1,12 +1,11 @@
-# Initializes a connection to mongodb
-# Requires (and thus initializes) all models in module/db/models
-
 directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 mongoose = require 'mongoose'
 
 Brick = require '../Brick'
 
+# Initializes a connection to mongodb
+# Then initializes (requires) all mongoose models found in the modules
 module.exports = class Mongoose extends Brick
   constructor: (config = {}) ->
     @mongoConnectionInfo = {

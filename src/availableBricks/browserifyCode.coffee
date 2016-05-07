@@ -1,6 +1,3 @@
-# Looks for code in the module/client directory and requires each top level file in
-# the 'client.js' bundle
-
 directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 fs = require 'fs'
@@ -14,6 +11,8 @@ browserify.settings({
   transform: [coffeeify]
 })
 
+# Looks for code in the module/client directory and requires each top level file.
+# Served as 'client.js' bundle
 module.exports = class BrowserifyCode extends Brick
   constructor: (config = {}) ->
     @bundledFiles = []
