@@ -3,7 +3,10 @@ express = require 'express'
 Promise = require 'bluebird'
 directoryUtils = require '../utils/directoryUtils'
 
-module.exports = class PublicAssets
+module.exports = class StaticAssets
+  constructor: (config = {}) ->
+    @staticPaths = config.staticPaths || ['public']
+
   # called before any modules are initialized
   prepareInitialization: (@expressApp, @log, @environment) =>
     # static Fontawesome in node modules
@@ -13,16 +16,19 @@ module.exports = class PublicAssets
   initializeModule: (moduleFolder, module) =>
     p = Promise.resolve()
     p = p.then =>
-      # Check if public folder exists, serve it staticly
-      pubFolder = path.join moduleFolder, 'public'
-      return directoryUtils.directoryExists(pubFolder)
-      .then (doesExist) =>
-        if doesExist
-          @expressApp.use express.static(pubFolder)
-
+      servePromises = []
+      for staticPath in @staticPaths
+        servePromises.push @_serveStaticallyIfExists(moduleFolder, staticPath)
+      return Promise.all(servePromises)
     return p
 
+  _serveStaticallyIfExists: (moduleFolder, staticPath) ->
+    pubFolder = path.join moduleFolder, staticPath
+    return directoryUtils.directoryExists(pubFolder)
+    .then (doesExist) =>
+      if doesExist
+        @expressApp.use express.static(pubFolder)
+
   # called after all modules are initialized
-  # Actually set up browserify bundle with all collected files
   finishInitialization: ->
     return
