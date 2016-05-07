@@ -1,2 +1,1 @@
-module.exports =
-  ModuleFramework: require './ModuleFramework'
+module.exports = require './ServerBricks'

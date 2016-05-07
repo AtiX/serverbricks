@@ -1,7 +1,7 @@
 directoryUtils = require './utils/directoryUtils'
 Promise = require 'bluebird'
 
-module.exports = class ModuleFramework
+module.exports = class ServerBricks
   constructor: (options = {}) ->
     # Extract options
 
