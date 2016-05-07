@@ -31,7 +31,7 @@ module.exports = class ServerBricks
       @bricks.push brickInstanceOrString
 
   initialize: (@modulePath, partsToInitialize) =>
-    @log.info "[Framework] Initializing Framework (#{@modulePath})"
+    @log.info "[ServerBricks] Initializing Framework (modules: #{@modulePath})"
 
     # If no filter is given, init all parts, else, only initialize the selected ones
     selectedParts = []
@@ -42,7 +42,7 @@ module.exports = class ServerBricks
         part = @bricks.find (p) -> p.name == partName
 
         if part.isInizialized = true
-          @log.info "[Framework] Skipping initialization of part '#{partName}' because it already is initialized"
+          @log.info "[ServerBricks] Skipping initialization of brick '#{partName}' because it already is initialized"
         else
           selectedParts.push part
           part.isInizialized = true
@@ -76,7 +76,7 @@ module.exports = class ServerBricks
       return Promise.all(partPromises)
 
     p = p.catch (error) =>
-      @log.error '[Framework] Framework initialization error:'
+      @log.error '[ServerBricks] Framework initialization error:'
       @log.error error
       throw error
 
@@ -84,7 +84,7 @@ module.exports = class ServerBricks
 
   # Calls initializeModule on all Framework parts
   _initializeModule: (parentDir, moduleFolder, selectedParts) =>
-    @log.info "[Framework] Initializing module '#{moduleFolder}'"
+    @log.info "[ServerBricks] Initializing module '#{moduleFolder}'"
     module = @modules[moduleFolder] = {}
 
     partPromises = []
