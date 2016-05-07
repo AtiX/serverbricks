@@ -6,11 +6,19 @@ path = require 'path'
 mongoose = require 'mongoose'
 
 module.exports = class Mongoose
+  constructor: (config = {}) ->
+    @mongoConnectionInfo = {
+      host: config.host || 'localhost'
+      port: config.port || 27017
+      db: config.db || 'default-db'
+    }
+    @modelSubpath = config.modelSubpath || 'db/models'
+
   prepareInitialization: (@expressApp, @log, @environment) =>
     return new Promise (resolve, reject) =>
       connectionString = "mongodb://\
-        #{@environment.mongodb.host}:#{@environment.mongodb.port}/\
-        #{@environment.mongodb.db}"
+        #{@mongoConnectionInfo.host}:#{@mongoConnectionInfo.port}/\
+        #{@mongoConnectionInfo.db}"
 
       @log.info "[MongoDB] Connecting to mongodb (#{connectionString})"
       mongoose.connect(connectionString)
@@ -24,7 +32,7 @@ module.exports = class Mongoose
         resolve()
 
   initializeModule: (moduleFolder, module) =>
-    modelsPath = path.join moduleFolder, 'db', 'models'
+    modelsPath = path.join moduleFolder, @modelSubpath
 
     return directoryUtils.listFiles modelsPath
     .then (files) =>
