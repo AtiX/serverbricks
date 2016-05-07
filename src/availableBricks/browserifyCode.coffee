@@ -13,8 +13,11 @@ browserify.settings({
 })
 
 module.exports = class BrowserifyCode
-  constructor: ->
+  constructor: (config = {})->
     @bundledFiles = []
+    @externalModules = config.externalModules || []
+    @externalBundleName = config.externalBundleName || '/shared.js'
+    @bundleName = config.bundleName || '/client.js'
 
   # called before any modules are initialized
   prepareInitialization: (@expressApp, @log, @environment) =>
@@ -46,23 +49,16 @@ module.exports = class BrowserifyCode
     else
       browserify.settings.mode = 'production'
 
-    # Shared modules that are used by others
-    shared = [
-      'angular'
-      'angular-resource'
-      'angular-ui-bootstrap'
-    ]
-
-    @expressApp.get '/shared.js', browserify(shared, {
+    @expressApp.get @externalBundleName, browserify(@externalModules, {
       cache: true
       precompile: true
-      noParse: shared
+      noParse: @externalModules
     })
 
     # Build up file that requires everything
     tempSourceFile = ''
     for sourceFile in @bundledFiles
-      tempSourceFile += "require './#{sourceFile}'\n"
+      tempSourceFile += "require '#{path.resolve sourceFile}'\n"
     # Escape backslash for windows paths
     tempSourceFile = tempSourceFile.replace(/\\/g, '\\\\')
 
@@ -70,7 +66,7 @@ module.exports = class BrowserifyCode
     fs.writeFileSync fileName, tempSourceFile
 
     # Define it as bundle
-    @expressApp.get '/client.js', browserify(fileName, {
-      extensions: ['.coffee']
-      external: shared
+    @expressApp.get @bundleName, browserify(fileName, {
+      extensions: ['.coffee', '.js']
+      external: @externalModules
     })
