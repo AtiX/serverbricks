@@ -6,12 +6,14 @@ Brick = require '../Brick'
 
 module.exports = class StaticAssets extends Brick
   constructor: (config = {}) ->
-    @staticPaths = config.staticPaths || ['public']
+    @staticPaths = config.moduleAssetPaths || ['public']
+    @staticNodeModulePaths = config.nodeModuleAssetPaths || []
 
-  # called before any modules are initialized
   prepareInitialization: (@expressApp, @log) =>
-    # static Fontawesome in node modules
-    @expressApp.use express.static('node_modules/font-awesome/')
+    for nodeModulePath in @staticNodeModulePaths
+      pathToUse = path.join 'node_modules', nodeModulePath
+      @expressApp.use express.static(pathToUse)
+      @log.debug "[ServerBricks] Serve static asset node-module path '#{pathToUse}'"
 
   # called on each module
   initializeModule: (moduleFolder) =>
@@ -29,3 +31,4 @@ module.exports = class StaticAssets extends Brick
     .then (doesExist) =>
       if doesExist
         @expressApp.use express.static(pubFolder)
+        @log.debug "[ServerBricks] Serve static asset module path '#{pubFolder}'"
