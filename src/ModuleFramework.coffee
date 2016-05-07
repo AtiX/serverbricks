@@ -25,7 +25,7 @@ module.exports = class ModuleFramework
 
   addBrick: (brickInstanceOrString, brickParameters = {}) =>
     if (typeof brickInstanceOrString) == 'string'
-      BrickClass = require "./frameworkParts/#{brickInstanceOrString}"
+      BrickClass = require "./availableBricks/#{brickInstanceOrString}"
       brickInstanceOrString = new BrickClass(brickParameters)
 
       @bricks.push brickInstanceOrString
