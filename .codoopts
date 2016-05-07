@@ -1,6 +1,6 @@
---name       "Module Template"
+--name       "Serverbricks"
 --readme     README.md
---title      "Codo Documentation"
+--title      "Serverbricks Codo Documentation"
 --private
 --quiet
 --extension  coffee
