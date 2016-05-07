@@ -2,19 +2,20 @@ path = require 'path'
 sassMiddleware = require 'node-sass-middleware'
 Promise = require 'bluebird'
 directoryUtils = require '../utils/directoryUtils'
+Brick = require '../Brick'
 
 # Autogenerates CSS out of SASS/SCSS files in a defined subfolder and serves them
-module.exports = class Sass
+module.exports = class Sass extends Brick
 
   constructor: (config = {}) ->
     @styleSubfolder = config.styleSubfolder || 'public/styles'
     @urlPrefix = config.urlPrefix || '/styles'
 
-  prepareInitialization: (@expressApp, @log, @environment) =>
+  prepareInitialization: (@expressApp, @log) =>
     return
 
   # called on each module
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     p = Promise.resolve()
     p = p.then =>
       pubStylesFolder = path.join moduleFolder, @styleSubfolder
@@ -30,7 +31,3 @@ module.exports = class Sass
             sourceMap: true
           })
     return p
-
-  # called after all modules are initialized
-  finishInitialization: ->
-    return

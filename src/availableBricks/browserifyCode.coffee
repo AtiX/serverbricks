@@ -5,26 +5,29 @@ directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 fs = require 'fs'
 
-# Configure browserify
+Brick = require '../Brick'
+
+# Configure browserify to work with coffeescript
 coffeeify = require 'coffeeify'
 browserify = require 'browserify-middleware'
 browserify.settings({
   transform: [coffeeify]
 })
 
-module.exports = class BrowserifyCode
+module.exports = class BrowserifyCode extends Brick
   constructor: (config = {})->
     @bundledFiles = []
     @externalModules = config.externalModules || []
     @externalBundleName = config.externalBundleName || '/shared.js'
     @bundleName = config.bundleName || '/client.js'
+    @developmentMode = config.developmentMode || true
 
   # called before any modules are initialized
-  prepareInitialization: (@expressApp, @log, @environment) =>
+  prepareInitialization: (@expressApp, @log) =>
     return
 
   # called on each module
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     codeDir = path.join moduleFolder, 'client'
 
     p = directoryUtils.listFiles codeDir, '.coffee'
@@ -44,7 +47,7 @@ module.exports = class BrowserifyCode
   finishInitialization: =>
     # General browserify settings
     browserify.settings.production 'cache', '1 hour'
-    if @environment.developmentMode
+    if @developmentMode
       browserify.settings.mode = 'development'
     else
       browserify.settings.mode = 'production'

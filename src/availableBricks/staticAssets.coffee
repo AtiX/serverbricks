@@ -2,18 +2,19 @@ path = require 'path'
 express = require 'express'
 Promise = require 'bluebird'
 directoryUtils = require '../utils/directoryUtils'
+Brick = require '../Brick'
 
-module.exports = class StaticAssets
+module.exports = class StaticAssets extends Brick
   constructor: (config = {}) ->
     @staticPaths = config.staticPaths || ['public']
 
   # called before any modules are initialized
-  prepareInitialization: (@expressApp, @log, @environment) =>
+  prepareInitialization: (@expressApp, @log) =>
     # static Fontawesome in node modules
     @expressApp.use express.static('node_modules/font-awesome/')
 
   # called on each module
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     p = Promise.resolve()
     p = p.then =>
       servePromises = []
@@ -28,7 +29,3 @@ module.exports = class StaticAssets
     .then (doesExist) =>
       if doesExist
         @expressApp.use express.static(pubFolder)
-
-  # called after all modules are initialized
-  finishInitialization: ->
-    return

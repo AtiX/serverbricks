@@ -1,13 +1,13 @@
 directoryUtils = require '../utils/directoryUtils'
-
+Brick = require '../Brick'
 path = require 'path'
 
-module.exports = class Routes
-  prepareInitialization: (@expressApp, @log, @environment) =>
+module.exports = class Routes extends Brick
+  prepareInitialization: (@expressApp, @log) =>
     return
 
   # called on each module
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     routesDir = path.join moduleFolder, 'routes'
 
     return directoryUtils.listFiles(routesDir)
@@ -23,7 +23,3 @@ module.exports = class Routes
       else
         throw error
 
-  # called after all modules are initialized
-  # Actually set up browserify bundle with all collected files
-  finishInitialization: ->
-    return

@@ -3,20 +3,24 @@
 directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 Promise = require 'bluebird'
+Brick = require '../Brick'
 
-module.exports = class ViewFolders
-  prepareInitialization: (@expressApp, @log, @environment) =>
+module.exports = class ViewFolders extends Brick
+  constructor: (config = {}) ->
+    @useViewCache = config.useViewCache || true
+
+  prepareInitialization: (@expressApp, @log) =>
     @viewFolders = []
 
     # Basic jade settings
     @expressApp.set 'view engine', 'jade'
-    if @environment.developmentMode
-      @expressApp.disable('view cache')
-    else
+    if @useViewCache
       @expressApp.enable('view cache')
+    else
+      @expressApp.disable('view cache')
     return
 
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     viewsFolder = path.join moduleFolder, 'views'
 
     return Promise.resolve().then =>

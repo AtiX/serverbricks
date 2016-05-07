@@ -5,7 +5,9 @@ directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 mongoose = require 'mongoose'
 
-module.exports = class Mongoose
+Brick = require '../Brick'
+
+module.exports = class Mongoose extends Brick
   constructor: (config = {}) ->
     @mongoConnectionInfo = {
       host: config.host || 'localhost'
@@ -14,7 +16,7 @@ module.exports = class Mongoose
     }
     @modelSubpath = config.modelSubpath || 'db/models'
 
-  prepareInitialization: (@expressApp, @log, @environment) =>
+  prepareInitialization: (@expressApp, @log) =>
     return new Promise (resolve, reject) =>
       connectionString = "mongodb://\
         #{@mongoConnectionInfo.host}:#{@mongoConnectionInfo.port}/\
@@ -31,7 +33,7 @@ module.exports = class Mongoose
         @log.info '[MongoDB] Connection established'
         resolve()
 
-  initializeModule: (moduleFolder, module) =>
+  initializeModule: (moduleFolder) =>
     modelsPath = path.join moduleFolder, @modelSubpath
 
     return directoryUtils.listFiles modelsPath
@@ -45,6 +47,3 @@ module.exports = class Mongoose
       if error.code == 'ENOENT'
         return
       throw error
-
-  finishInitialization: ->
-    return
