@@ -23,8 +23,6 @@ module.exports = class ServerBricks
       throw new Error('options.modulePath must not be null')
     @modulePath = path.resolve @modulePath
 
-    @environment = options.environment || {}
-
     @bricks = []
     @modules = {}
     return
@@ -59,7 +57,7 @@ module.exports = class ServerBricks
     p = p.then =>
       partPromises = []
       for part in selectedParts
-        partPromises.push part.prepareInitialization(@expressApp, @log, @environment)
+        partPromises.push part.prepareInitialization(@expressApp, @log)
       return Promise.all partPromises
 
     # List all directories and call initializeModule on them
