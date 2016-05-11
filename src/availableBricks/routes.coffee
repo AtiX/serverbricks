@@ -12,10 +12,16 @@ module.exports = class Routes extends Brick
 
     return directoryUtils.listFiles(routesDir)
     .then (routeFiles) =>
+      routePromises = []
+
       for file in routeFiles
         # Require route module and call initialize on it
         routeModule = require path.join routesDir, file
-        routeModule.initialize @expressApp
+        returnValue = routeModule.initialize @expressApp
+        if returnValue?
+          routePromises.push returnValue
+
+      return Promise.all(routePromises)
     .catch (error) ->
       # ignore it if routes subfolder does not exist
       if error.code == 'ENOENT'
