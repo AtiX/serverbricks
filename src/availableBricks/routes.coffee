@@ -8,6 +8,7 @@ module.exports = class Routes extends Brick
 
   # called on each module
   initializeModule: (moduleFolder) =>
+    @log.debug '[ServerBricks] initializes routes brick'
     routesDir = path.join moduleFolder, 'routes'
 
     return directoryUtils.listFiles(routesDir)

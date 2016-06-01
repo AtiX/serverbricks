@@ -16,6 +16,9 @@ module.exports = class Mongoose extends Brick
     @modelSubpath = config.modelSubpath || 'db/models'
 
   prepareInitialization: (@expressApp, @log) =>
+    @log.debug '[ServerBricks] initializes mongoose brick'
+    @log.debug "[ServerBricks] (host: #{@mongoConnectionInfo}, models: #{@modelSubpath})"
+
     return new Promise (resolve, reject) =>
       connectionString = "mongodb://\
         #{@mongoConnectionInfo.host}:#{@mongoConnectionInfo.port}/\

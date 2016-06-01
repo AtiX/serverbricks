@@ -10,6 +10,8 @@ module.exports = class StaticAssets extends Brick
     @staticNodeModulePaths = config.nodeModuleAssetPaths || []
 
   prepareInitialization: (@expressApp, @log) =>
+    @log.debug '[ServerBricks] initializes staticAssets brick'
+
     for nodeModulePath in @staticNodeModulePaths
       pathToUse = path.join 'node_modules', nodeModulePath
       @expressApp.use express.static(pathToUse)

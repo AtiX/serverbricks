@@ -12,6 +12,8 @@ module.exports = class Sass extends Brick
     @urlPrefix = config.urlPrefix || '/styles'
 
   prepareInitialization: (@expressApp, @log) =>
+    @log.debug '[ServerBricks] initializes sass brick'
+    @log.debug "[ServerBricks] (styleSubfolder: #{@styleSubfolder}, urlPrefix: #{@urlPrefix})"
     return
 
   # called on each module

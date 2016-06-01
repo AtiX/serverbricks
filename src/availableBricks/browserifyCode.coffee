@@ -23,6 +23,9 @@ module.exports = class BrowserifyCode extends Brick
 
   # called before any modules are initialized
   prepareInitialization: (@expressApp, @log) =>
+    @log.debug '[ServerBricks] initializes browserifyCode brick'
+    @log.debug "[ServerBricks] (bundleName: #{@bundleName})"
+
     return
 
   # called on each module
