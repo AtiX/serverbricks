@@ -76,12 +76,20 @@ receiving an brick instance, which needs to offer the methods specified in `Bric
 - *browserifyCode* bundles code with browserify and serves it to clients as client.js.
 - *mongoose* initializes a connection to mongodb and looks for mongoose models in /db/models
 - *routes* lets each module define routes in /routes
-- *sass* transforms sass/scss to css in /public/styles
-- *staticAssets* serves everything in /public as static files
+- *sass* transforms sass/scss to css in /public/styles. Important: use this brick before
+the staticAssets bricks or stylesheet recompilation won't work.
+- *staticAssets* serves everything in /public as static files.
 - *viewFolders* configures express to use jade as a view engine and allows to use jade templates stored in /views
 
-## API Documentation
-< ToDo: Host codo documentation somewhere >
+## Brick configuration
+
+Each brick can be configured by supplying a config object: `serverBricks.addBrick 'Name', config`
+
+**sass:**
+
+- `urlPrefix` defines the url prefix where stylesheets are served. Defaults to `/styles`, so a stylesheet
+named `screen.sass` will be available as `/styles/screen.css`.
+- `styleSubfolder` defines the subfolder in each module where stylesheets are searched. Defaults to `public/styles`
 
 ## Development
 Although the ideas and most of the code of ServerBricks is used in multiple production apps, the module itself is fairly new
