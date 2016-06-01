@@ -91,6 +91,10 @@ Each brick can be configured by supplying a config object: `serverBricks.addBric
 named `screen.sass` will be available as `/styles/screen.css`.
 - `styleSubfolder` defines the subfolder in each module where stylesheets are searched. Defaults to `public/styles`
 
+**viewFolders:**
+
+- `useViewCache` defines whether view caching is used. Defaults to `true`.
+
 ## Development
 Although the ideas and most of the code of ServerBricks is used in multiple production apps, the module itself is fairly new
 and still needs some work and polishing - feel free to file issues and create pull requests.
