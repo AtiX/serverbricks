@@ -1,6 +1,6 @@
 {
   "name": "serverbricks",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Pluggable Node.js server framework based on express to jumpstart server development",
   "main": "./build/index.js",
   "readme": "README.md",
