@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/AtiX/serverbricks",
   "dependencies": {
-    "bluebird": "3.4.0",
+    "bluebird": "3.4.1",
     "browserify-middleware": "7.0.0",
     "coffeeify": "2.0.1",
-    "mongoose": "4.4.19",
+    "mongoose": "4.5.1",
     "node-sass-middleware": "0.9.8",
     "pug": "^2.0.0-beta3"
   },
