@@ -79,7 +79,7 @@ receiving an brick instance, which needs to offer the methods specified in `Bric
 - *sass* transforms sass/scss to css in /public/styles. Important: use this brick before
 the staticAssets bricks or stylesheet recompilation won't work.
 - *staticAssets* serves everything in /public as static files.
-- *viewFolders* configures express to use jade as a view engine and allows to use jade templates stored in /views
+- *viewFolders* configures express to use pug ~~jade~~ as a view engine and allows to use pug/jade templates stored in /views
 
 ## Brick configuration
 

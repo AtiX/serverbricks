@@ -27,7 +27,8 @@
     "browserify-middleware": "7.0.0",
     "coffeeify": "2.0.1",
     "mongoose": "4.4.19",
-    "node-sass-middleware": "0.9.8"
+    "node-sass-middleware": "0.9.8",
+    "pug": "^2.0.0-beta3"
   },
   "devDependencies": {
     "chai": "3.5.0",

@@ -17,7 +17,7 @@ module.exports = class ViewFolders extends Brick
     @viewFolders = []
 
     # Basic jade settings
-    @expressApp.set 'view engine', 'jade'
+    @expressApp.set 'view engine', 'pug'
     if @useViewCache
       @expressApp.enable('view cache')
     else
