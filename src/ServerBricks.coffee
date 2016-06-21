@@ -27,57 +27,44 @@ module.exports = class ServerBricks
     @modules = {}
     return
 
-  addBrick: (brickInstanceOrString, brickParameters = {}) =>
+  addBrick: (brickInstanceOrString, brickParameters = {}, before) =>
     if (typeof brickInstanceOrString) == 'string'
       BrickClass = require "./availableBricks/#{brickInstanceOrString}"
       brickInstanceOrString = new BrickClass(brickParameters)
 
       @bricks.push brickInstanceOrString
 
-  initialize: (partsToInitialize) =>
+  initialize: =>
     @log.info "[ServerBricks] Initializing Framework (modules: #{@modulePath})"
-
-    # If no filter is given, init all parts, else, only initialize the selected ones
-    selectedParts = []
-    if not partsToInitialize?
-      selectedParts = @bricks
-    else
-      for partName in partsToInitialize
-        part = @bricks.find (p) -> p.name == partName
-
-        if part.isInizialized = true
-          @log.info "[ServerBricks] Skipping initialization of brick '#{partName}' because it already is initialized"
-        else
-          selectedParts.push part
-          part.isInizialized = true
 
     p = Promise.resolve()
 
-    # Call pre initialization calls on framework parts
+    # Call pre initialization call on each brick
     p = p.then =>
       partPromises = []
-      for part in selectedParts
+      for part in @bericks
         partPromises.push part.prepareInitialization(@expressApp, @log)
       return Promise.all partPromises
 
-    # List all directories and call initializeModule on them
+    # List all directories (=modules)
     p = p.then =>
       directoryUtils.listDirectories(@modulePath)
 
+    # and initialize them one by one with all bricks
     p = p.then (directories) =>
       initPromises = []
 
       for folder in directories
-        initPromises.push @_initializeModule @modulePath, folder, selectedParts
+        initPromises.push @_initializeModule @modulePath, folder
 
       return Promise.all(initPromises)
 
-    # Call post initialization calls on framework parts
+    # Call post initialization call on each brick
     p = p.then ->
-      partPromises = []
-      for part in selectedParts
-        partPromises.push part.finishInitialization()
-      return Promise.all(partPromises)
+      brickPromises = []
+      for brick in @bricks
+        brickPromises.push brick.finishInitialization()
+      return Promise.all(brickPromises)
 
     p = p.catch (error) =>
       @log.error '[ServerBricks] Framework initialization error:'
@@ -86,14 +73,14 @@ module.exports = class ServerBricks
 
     return p
 
-  # Calls initializeModule on all Framework parts
-  _initializeModule: (parentDir, moduleFolder, selectedParts) =>
+  # Calls initializeModule on all bricks on a selected module folder
+  _initializeModule: (parentDir, moduleFolder) =>
     @log.info "[ServerBricks] Initializing module '#{moduleFolder}'"
     module = @modules[moduleFolder] = {}
 
     partPromises = []
-    for part in selectedParts
+    for brick in @bricks
       absoluteModuleDir = path.join parentDir, moduleFolder
-      partPromises.push part.initializeModule(absoluteModuleDir, module)
+      partPromises.push brick.initializeModule(absoluteModuleDir, module)
 
     return Promise.all(partPromises)
