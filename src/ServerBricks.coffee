@@ -27,57 +27,57 @@ module.exports = class ServerBricks
     @modules = {}
     return
 
-  addBrick: (brickInstanceOrString, brickParameters = {}) =>
+  # Add a brick to be initialized and used with ServerBricks
+  # @param [String or Brick] brickInstanceOrString class name or instance of the brick to be used
+  # @param [Object] brickParameters constructor parameters for the brick, only used if initialized by class name
+  # @param [Function] preInitCallback
+  #   callback that is called before prepareInitialization is executed on this brick. May return a Promise.
+  # @param [Function] postInitCallback
+  #   callback that is called after prepareInitialization is executed on this brick. May return a Promise.
+  addBrick: (brickInstanceOrString, brickParameters = {}, preInitCallback, postInitCallback) =>
     if (typeof brickInstanceOrString) == 'string'
       BrickClass = require "./availableBricks/#{brickInstanceOrString}"
       brickInstanceOrString = new BrickClass(brickParameters)
 
-      @bricks.push brickInstanceOrString
+      @bricks.push {
+        brick: brickInstanceOrString
+        preInitCallback: preInitCallback
+        postInitCallback: postInitCallback
+      }
 
-  initialize: (partsToInitialize) =>
+  initialize: =>
     @log.info "[ServerBricks] Initializing Framework (modules: #{@modulePath})"
-
-    # If no filter is given, init all parts, else, only initialize the selected ones
-    selectedParts = []
-    if not partsToInitialize?
-      selectedParts = @bricks
-    else
-      for partName in partsToInitialize
-        part = @bricks.find (p) -> p.name == partName
-
-        if part.isInizialized = true
-          @log.info "[ServerBricks] Skipping initialization of brick '#{partName}' because it already is initialized"
-        else
-          selectedParts.push part
-          part.isInizialized = true
 
     p = Promise.resolve()
 
-    # Call pre initialization calls on framework parts
+    # Call pre initialization call on each brick as well as the pre/post callbacks if specified
     p = p.then =>
-      partPromises = []
-      for part in selectedParts
-        partPromises.push part.prepareInitialization(@expressApp, @log)
-      return Promise.all partPromises
+      initChain = Promise.resolve()
+      for brickEntry in @bricks
+        do (brickEntry) =>
+          initChain = initChain.then =>
+            @_initializeBrick(brickEntry)
+      return initChain
 
-    # List all directories and call initializeModule on them
+    # List all directories (=modules)
     p = p.then =>
       directoryUtils.listDirectories(@modulePath)
 
+    # and initialize them one by one with all bricks
     p = p.then (directories) =>
       initPromises = []
 
       for folder in directories
-        initPromises.push @_initializeModule @modulePath, folder, selectedParts
+        initPromises.push @_initializeModule @modulePath, folder
 
       return Promise.all(initPromises)
 
-    # Call post initialization calls on framework parts
-    p = p.then ->
-      partPromises = []
-      for part in selectedParts
-        partPromises.push part.finishInitialization()
-      return Promise.all(partPromises)
+    # Call post initialization call on each brick
+    p = p.then =>
+      brickPromises = []
+      for brickEntry in @bricks
+        brickPromises.push brickEntry.brick.finishInitialization()
+      return Promise.all(brickPromises)
 
     p = p.catch (error) =>
       @log.error '[ServerBricks] Framework initialization error:'
@@ -86,14 +86,32 @@ module.exports = class ServerBricks
 
     return p
 
-  # Calls initializeModule on all Framework parts
-  _initializeModule: (parentDir, moduleFolder, selectedParts) =>
+  # Calls initializeModule on all bricks on a selected module folder
+  _initializeModule: (parentDir, moduleFolder) =>
     @log.info "[ServerBricks] Initializing module '#{moduleFolder}'"
     module = @modules[moduleFolder] = {}
 
     partPromises = []
-    for part in selectedParts
+    for brickEntry in @bricks
       absoluteModuleDir = path.join parentDir, moduleFolder
-      partPromises.push part.initializeModule(absoluteModuleDir, module)
+      partPromises.push brickEntry.brick.initializeModule(absoluteModuleDir, module)
 
     return Promise.all(partPromises)
+
+  # calls prepareInitialization as well as specified pre/post init callbacks on a specified entry of the
+  # @bricks array
+  _initializeBrick: (brickEntry) =>
+    p = Promise.resolve()
+
+    if brickEntry.preInitCallback?
+      p = p.then ->
+        brickEntry.preInitCallback()
+
+    p = p.then =>
+      brickEntry.brick.prepareInitialization(@expressApp, @log)
+
+    if brickEntry.postInitCallback?
+      p = p.then ->
+        brickEntry.postInitCallback()
+
+    return p

@@ -85,6 +85,9 @@ the staticAssets bricks or stylesheet recompilation won't work.
 
 Each brick can be configured by supplying a config object: `serverBricks.addBrick 'Name', config`
 
+You can specify callbacks to be executed (e.g. do something after mongodb/mongoose has been initialized or before routes are initialized)
+when adding the brick: `serverBricks.addBrick 'Name', config, preInitCallback, postInitCallback`. Callbacks may return a Promise.
+
 **sass:**
 
 - `urlPrefix` defines the url prefix where stylesheets are served. Defaults to `/styles`, so a stylesheet
