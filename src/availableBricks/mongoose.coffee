@@ -26,9 +26,9 @@ module.exports = class Mongoose extends Brick
         #{@mongoConnectionInfo.db}"
 
       @log.info "[MongoDB] Connecting to mongodb (#{connectionString})"
-      mongoose.connect(connectionString)
+      @mongooseModule.connect(connectionString)
 
-      db = mongoose.connection
+      db = @mongooseModule.connection
       db.on 'error', (error) =>
         @log.error "[MongoDB] #{error}"
         reject error
