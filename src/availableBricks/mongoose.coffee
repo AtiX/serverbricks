@@ -14,6 +14,7 @@ module.exports = class Mongoose extends Brick
       db: config.db || 'default-db'
     }
     @modelSubpath = config.modelSubpath || 'db/models'
+    @mongooseModule = config.mongoose || mongoose
 
   prepareInitialization: (@expressApp, @log) =>
     @log.debug '[ServerBricks] initializes mongoose brick'
@@ -25,9 +26,9 @@ module.exports = class Mongoose extends Brick
         #{@mongoConnectionInfo.db}"
 
       @log.info "[MongoDB] Connecting to mongodb (#{connectionString})"
-      mongoose.connect(connectionString)
+      @mongooseModule.connect(connectionString)
 
-      db = mongoose.connection
+      db = @mongooseModule.connection
       db.on 'error', (error) =>
         @log.error "[MongoDB] #{error}"
         reject error
