@@ -26,13 +26,13 @@
     "bluebird": "3.4.1",
     "browserify-middleware": "7.0.0",
     "coffeeify": "2.0.1",
-    "mongoose": "4.5.1",
+    "mongoose": "4.5.5",
     "node-sass-middleware": "0.9.8",
     "pug": "^2.0.0-beta3"
   },
   "devDependencies": {
     "chai": "3.5.0",
-    "codo": "2.1.0",
+    "codo": "2.1.2",
     "coffeelint": "1.15.7",
     "grunt": "1.0.1",
     "grunt-cli": "1.2.0",
