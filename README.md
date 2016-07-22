@@ -98,6 +98,17 @@ named `screen.sass` will be available as `/styles/screen.css`.
 
 - `useViewCache` defines whether view caching is used. Defaults to `true`.
 
+**mongoose**
+
+- `host` defines the mongoDB hostname, defaults to `localhost`.
+- `port` defines the mongoDB port, defaults to `27017`.
+- `db` defines the mongoDB database name, defaults to `default-db`.
+- `modelSubpath` defines the subfolder of each module where models are loaded. Defaults to `db/models`.
+- `mongoose` defines the mongoose module-instance to be used. Defaults to the mongoose module as specified in package.json.
+If you use multiple plugins that require mongoose, it's probably best to specify and require mongoose in your application's
+package.json and then hand this instance down to plugins (including serverbricks) in order to prevent strange bugs
+resulting out of different required versions.
+
 ## Development
 Although the ideas and most of the code of ServerBricks is used in multiple production apps, the module itself is fairly new
 and still needs some work and polishing - feel free to file issues and create pull requests.

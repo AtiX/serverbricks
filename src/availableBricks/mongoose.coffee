@@ -14,6 +14,7 @@ module.exports = class Mongoose extends Brick
       db: config.db || 'default-db'
     }
     @modelSubpath = config.modelSubpath || 'db/models'
+    @mongooseModule = config.mongoose || mongoose
 
   prepareInitialization: (@expressApp, @log) =>
     @log.debug '[ServerBricks] initializes mongoose brick'
