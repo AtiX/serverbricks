@@ -28,7 +28,7 @@
     "coffeeify": "2.0.1",
     "mongoose": "4.5.5",
     "node-sass-middleware": "0.9.8",
-    "pug": "^2.0.0-beta3"
+    "pug": "2.0.0-beta3"
   },
   "devDependencies": {
     "chai": "3.5.0",
