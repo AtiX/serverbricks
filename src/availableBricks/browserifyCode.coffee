@@ -19,7 +19,7 @@ module.exports = class BrowserifyCode extends Brick
     @externalModules = config.externalModules || []
     @externalBundleName = config.externalBundleName || '/shared.js'
     @bundleName = config.bundleName || '/client.js'
-    @developmentMode = config.developmentMode || true
+    @developmentMode = if config.developmentMode? then config.developmentMode else true
 
   # called before any modules are initialized
   prepareInitialization: (@expressApp, @log) =>
