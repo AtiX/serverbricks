@@ -1,15 +1,10 @@
 directoryUtils = require '../utils/directoryUtils'
 path = require 'path'
 fs = require 'fs'
+browserify = require 'browserify-middleware'
+coffeeify = require 'coffeeify'
 
 Brick = require '../Brick'
-
-# Configure browserify to work with coffeescript
-coffeeify = require 'coffeeify'
-browserify = require 'browserify-middleware'
-browserify.settings({
-  transform: [coffeeify]
-})
 
 # Looks for code in the module/client directory and requires each top level file.
 # Served as 'client.js' bundle
@@ -20,6 +15,7 @@ module.exports = class BrowserifyCode extends Brick
     @externalBundleName = config.externalBundleName || '/shared.js'
     @bundleName = config.bundleName || '/client.js'
     @developmentMode = if config.developmentMode? then config.developmentMode else true
+    @additionalTransforms = if config.additionalTransforms? then config.additionalTransforms else []
 
   # called before any modules are initialized
   prepareInitialization: (@expressApp, @log) =>
@@ -53,6 +49,14 @@ module.exports = class BrowserifyCode extends Brick
       browserify.settings.mode = 'development'
     else
       browserify.settings.mode = 'production'
+
+    # Use coffeeify and other user specified transforms
+    usedTransforms = [coffeeify]
+    for transform in @additionalTransforms
+      usedTransforms.push transform
+    browserify.settings({
+      transform: usedTransforms
+    })
 
     @expressApp.get @externalBundleName, browserify(@externalModules, {
       cache: true

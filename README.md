@@ -109,6 +109,13 @@ If you use multiple plugins that require mongoose, it's probably best to specify
 package.json and then hand this instance down to plugins (including serverbricks) in order to prevent strange bugs
 resulting out of different required versions.
 
+**browserify**
+
+- `additionalTransfomrs` defines an array of transforms to be applied as well (next to coffeeify which is always active)
+- `externalModules / externalBundleName` defines what modules are external (array) and how the bundle is to be named (default : `shared.js`)
+- `developmentMode` defines whether to apply production settings or not. Defaults to true.
+- `bundleName` defines how to name the code bundle, defaults to `client.js`
+
 ## Development
 Although the ideas and most of the code of ServerBricks is used in multiple production apps, the module itself is fairly new
 and still needs some work and polishing - feel free to file issues and create pull requests.
