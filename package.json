@@ -26,6 +26,7 @@
     "bluebird": "3.4.3",
     "browserify-middleware": "7.0.0",
     "coffeeify": "2.0.1",
+    "express": "^4.14.0",
     "mongoose": "4.5.10",
     "node-sass-middleware": "0.9.8",
     "pug": "2.0.0-beta6"
