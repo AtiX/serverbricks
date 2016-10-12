@@ -97,6 +97,7 @@ named `screen.sass` will be available as `/styles/screen.css`.
 **viewFolders:**
 
 - `useViewCache` defines whether view caching is used. Defaults to `true`.
+- `additionalViewFolders` defines individual folders (array of strings) that are used as view folders as well
 
 **mongoose**
 

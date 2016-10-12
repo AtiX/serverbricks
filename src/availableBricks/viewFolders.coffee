@@ -8,13 +8,17 @@ Brick = require '../Brick'
 module.exports = class ViewFolders extends Brick
   constructor: (config = {}) ->
     config.useViewCache ?= true
+    config.additionalViewFolders ?= []
+
     @useViewCache = config.useViewCache
+    @additionalViewFolders = config.additionalViewFolders
 
   prepareInitialization: (@expressApp, @log) =>
     @log.debug '[ServerBricks] initializes viewFolders brick'
     @log.debug "[ServerBricks] (useViewCache: #{@useViewCache})"
 
-    @viewFolders = []
+    # Initialize all view folders with those manually specified
+    @viewFolders = @additionalViewFolders.map (folder) -> path.resolve folder
 
     # Basic jade settings
     @expressApp.set 'view engine', 'pug'
