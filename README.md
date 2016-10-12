@@ -116,6 +116,13 @@ resulting out of different required versions.
 - `developmentMode` defines whether to apply production settings or not. Defaults to true.
 - `bundleName` defines how to name the code bundle, defaults to `client.js`
 
+** staticAssets **
+
+- `moduleAssetPaths` defines subfolders of modules whose content should be served statically. Per default, it is set to
+`['public']`, serving all files in `<module>/public` under the root URL `/`. Instead of specifying a string path,
+you can also use an object `{ urlRoot: '/moduleAssets', path: 'assets' }` to control the resulting URL.
+- `staticNodeModulesPaths` same as above, but specifies what node modules should be served statically, e.g. `['font-awesome']`.
+
 ## Development
 Although the ideas and most of the code of ServerBricks is used in multiple production apps, the module itself is fairly new
 and still needs some work and polishing - feel free to file issues and create pull requests.
